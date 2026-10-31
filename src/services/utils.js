@@ -1,0 +1,1 @@
+export const firstOf = (data) => (Array.isArray(data) ? data[0] : data)
