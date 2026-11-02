@@ -1,16 +1,49 @@
-# React + Vite
+# Helpdesk · Sistema de Tickets
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Front end em React para uma API de tickets de suporte: login, criação de tickets, listagem dos tickets do usuário, interações (comentários) e encerramento de tickets.
 
-Currently, two official plugins are available:
+## Funcionalidades
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Login com e-mail e senha (token Bearer) e sessão persistida
+- **Meus tickets**: lista apenas os tickets do usuário logado
+- Criar ticket (título e descrição)
+- Detalhe do ticket com interações: criar, editar e excluir
+- Encerrar ticket (status `closed`, exibido como "Finalizado")
 
-## React Compiler
+## Como rodar
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Requer Node.js 20.19+ (ou 22.12+).
 
-## Expanding the ESLint configuration
+```bash
+npm install
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Abra o endereço mostrado no terminal (normalmente http://localhost:5173).
+
+Outros comandos: `npm run build`, `npm run lint`.
+
+### Sobre a API e o proxy
+
+A API roda em `http` e em outro domínio, o que o navegador bloqueia (CORS). Em desenvolvimento, o Vite repassa as chamadas de `/api` para o servidor da API (veja `vite.config.js`). Por isso o projeto deve ser executado com `npm run dev`. Para usar outro servidor, copie `.env.example` para `.env` e altere `API_TARGET`.
+
+## Estrutura
+
+```
+src/
+├── components/   Layout, ProtectedRoute, InteractionItem
+├── contexts/     AuthContext (sessão e usuário logado)
+├── pages/        Login, Tickets, NewTicket, TicketDetail
+├── services/     http (fetch + token + erros), authService, ticketService, interactionService, utils
+├── App.jsx       rotas
+└── styles.css    tema escuro e botões liquid glass
+```
+
+Regra de arquitetura: apenas `services/` fala com a API; páginas e componentes usam os serviços.
+
+## Decisões e limitações
+
+- A especificação (OpenAPI) só documenta as respostas 200, 201 e 422. Tratamos erros de forma defensiva e assumimos que 401 significa sessão expirada.
+- Não existe `GET /tickets/{id}`; o detalhe localiza o ticket na lista de tickets do usuário (limite de 100).
+- Os botões de editar, excluir e encerrar aparecem para o autor e para administradores; quem decide de fato é a API.
+- O token fica em `localStorage` por simplicidade; em produção seria preferível cookie `HttpOnly`.

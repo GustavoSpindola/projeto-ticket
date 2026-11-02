@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import InteractionItem from '../components/InteractionItem'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../contexts/useAuth'
 import { interactionService } from '../services/interactionService'
 import { ticketService } from '../services/ticketService'
 import { STATUS_LABEL, formatDate } from '../services/utils'

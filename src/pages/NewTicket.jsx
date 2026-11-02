@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import { useAuth } from '../contexts/AuthContext'
+import { Link } from 'react-router-dom'
 import { ticketService } from '../services/ticketService'
 
 const EMPTY = { title: '', description: '' }
 
 export default function NewTicket() {
-  const { user, logout } = useAuth()
   const [form, setForm] = useState(EMPTY)
   const [error, setError] = useState('')
   const [created, setCreated] = useState(null)
@@ -29,27 +28,25 @@ export default function NewTicket() {
   }
 
   return (
-    <>
-      <header className="topbar">
-        <span>{user.name}</span>
-        <button type="button" className="link" onClick={logout}>Sair</button>
-      </header>
-      <main className="center">
-        <form onSubmit={handleSubmit} className="card wide">
-          <h1>Novo ticket</h1>
-          <label>
-            Título
-            <input name="title" value={form.title} onChange={handleChange} maxLength={255} required />
-          </label>
-          <label>
-            Descrição
-            <textarea name="description" value={form.description} onChange={handleChange} rows={6} required />
-          </label>
-          {error && <p role="alert" className="error">{error}</p>}
-          {created && <p role="status" className="success">Ticket #{created.id} criado.</p>}
-          <button disabled={submitting}>{submitting ? 'Criando...' : 'Criar ticket'}</button>
-        </form>
-      </main>
-    </>
+    <section className="page narrow">
+      <form onSubmit={handleSubmit} className="card">
+        <h1>Novo ticket</h1>
+        <label>
+          Título
+          <input name="title" value={form.title} onChange={handleChange} maxLength={255} required />
+        </label>
+        <label>
+          Descrição
+          <textarea name="description" value={form.description} onChange={handleChange} rows={6} required />
+        </label>
+        {error && <p role="alert" className="error">{error}</p>}
+        {created && (
+          <p role="status" className="success">
+            Ticket #{created.id} criado. <Link to={`/tickets/${created.id}`}>Abrir</Link>
+          </p>
+        )}
+        <button disabled={submitting}>{submitting ? 'Criando...' : 'Criar ticket'}</button>
+      </form>
+    </section>
   )
 }

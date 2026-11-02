@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../contexts/useAuth'
 import { ticketService } from '../services/ticketService'
 import { STATUS_LABEL, formatDate } from '../services/utils'
 

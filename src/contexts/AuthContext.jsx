@@ -1,27 +1,24 @@
-import { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { authService } from '../services/authService'
 import { tokenStorage } from '../services/http'
-
-const AuthContext = createContext(null)
+import { AuthContext } from './auth-context'
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+
+  const [loading, setLoading] = useState(() => Boolean(tokenStorage.get()))
 
   const logout = useCallback(() => {
     tokenStorage.clear()
     setUser(null)
   }, [])
 
-  // Ao abrir o app, se já existe token, recupera o usuário
   useEffect(() => {
-    if (!tokenStorage.get()) {
-      setLoading(false)
-      return
-    }
+    if (!tokenStorage.get()) return
     authService.me().then(setUser).catch(logout).finally(() => setLoading(false))
   }, [logout])
 
+  
   useEffect(() => {
     window.addEventListener('auth:expired', logout)
     return () => window.removeEventListener('auth:expired', logout)
@@ -38,5 +35,3 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   )
 }
-
-export const useAuth = () => useContext(AuthContext)
