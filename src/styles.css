@@ -1,0 +1,24 @@
+:root {
+  --bg: #f3f5f8;
+  --surface: #fff;
+  --text: #1b2433;
+  --muted: #5d6b82;
+  --primary: #1f5eff;
+  --danger: #c4311f;
+  --ok: #1d7a46;
+  font-family: system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); }
+.center { min-height: calc(100vh - 3.5rem); display: grid; place-items: center; padding: 1rem; }
+.card { background: var(--surface); padding: 2rem; border-radius: 8px; width: min(100%, 380px); display: grid; gap: 1rem; box-shadow: 0 1px 3px rgb(0 0 0 / 0.12); }
+.card.wide { width: min(100%, 560px); }
+.topbar { display: flex; justify-content: space-between; align-items: center; padding: 0 1.5rem; height: 3.5rem; background: var(--surface); box-shadow: 0 1px 3px rgb(0 0 0 / 0.12); }
+label { display: grid; gap: 0.35rem; font-size: 0.9rem; color: var(--muted); }
+input, textarea { padding: 0.6rem; border: 1px solid #c5cdd9; border-radius: 6px; font: inherit; color: var(--text); }
+button { padding: 0.7rem; border: 0; border-radius: 6px; background: var(--primary); color: #fff; font: inherit; cursor: pointer; }
+button.link { background: none; color: var(--primary); padding: 0.3rem; }
+button:disabled { opacity: 0.6; cursor: wait; }
+:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+.error { color: var(--danger); margin: 0; }
+.success { color: var(--ok); margin: 0; }
